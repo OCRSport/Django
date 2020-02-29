@@ -1,39 +1,49 @@
 import requests
+from .views import main_view
+
+DOMAIN = 'https://api.hh.ru/'
+vacancy = input('Введите вакансию для поиска (по умолчанию - python developer): ')
+if not vacancy:
+    vacancy = 'python developer'
+area = input('Введите регион для поиска (по умолчанию - Москва (1)): ')
+if not area:
+    area = '1'
 
 
 class Parser:
-    DOMAIN = 'https://api.hh.ru/'
-    url = f'{DOMAIN}vacancies'
-    vacancy = input('Введите вакансию для поиска (по умолчанию - python developer): ')
-    if not vacancy:
-        vacancy = 'python developer'
-    area = input('Введите регион для поиска (по умолчанию - Москва (1)): ')
-    if not area:
-        area = '1'
 
-    params = {
-        'text': vacancy,
-        'area': area,
-        'period': 30,  # поставил период за 30 дней
-        'page': 10  # не совсем понял смысл этих страниц
-    }
+    def __init__(self):
+        self.vacancy = vacancy
+        self.area = area
 
-    skills = {}
-    sum_all_skills = 0
+    def skills(self):
+        url = f'{DOMAIN}vacancies'
+        params = {
+            'text': self.vacancy,
+            'area': self.area,
+            'period': 30,  # поставил период за 30 дней
+            'page': 10  # не совсем понял смысл этих страниц
+        }
 
-    result = requests.get(url, params=params).json()
-    items = result['items']
+        skills = {}
+        # sum_all_skills = 0
 
-    for item in items:
-        url = item['url']
-        result = requests.get(url).json()
+        result = requests.get(url, params=params).json()
+        items = result['items']
 
-        for i in result['key_skills']:
-            if i['name'] in skills:
-                skills[i['name']] += 1
-            else:
-                skills[i['name']] = 1
+        for item in items:
+            url = item['url']
+            result = requests.get(url).json()
 
-    result_sort = sorted(skills.items(), key=lambda x: x[1])
+            # if result['salary']:
+            #     val = item['salary']
+            #     if val['from']:
+            #         salary.append(val['from'])
 
+            for i in result['key_skills']:
+                if i['name'] in skills:
+                    skills[i['name']] += 1
+                else:
+                    skills[i['name']] = 1
+        return skills
 
