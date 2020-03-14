@@ -16,8 +16,8 @@ Results
         </li>
             Ключевые навыки:
         <ul>
-            {% for skill in skills %}
-                {% if item.vacancy == skill.vacancy %}
+            {% for skill in object_list %}
+                {% if item.vacancy == skill.vacancy and skill.info > 1 %}
                 <li>
                    {{skill.name}} - {{skill.info}}
                 </li>

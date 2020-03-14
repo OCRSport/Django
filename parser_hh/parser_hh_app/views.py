@@ -1,5 +1,4 @@
 from django.shortcuts import render
-
 from .models import Vacancy, Skill, Code_Region
 from .form import Parser_form
 from django.views.generic import ListView, TemplateView
@@ -14,8 +13,9 @@ def main_view(request):
         if form.is_valid():
             vacancy = form.cleaned_data['vacancy_form']
             area = form.cleaned_data['area_form']
-            parser = Parser(vacancy, area)
-            return HttpResponseRedirect('/results/')
+            # parser = Parser(vacancy, area)
+            # parser.skills()
+            return HttpResponseRedirect('/results/'), vacancy, area
         else:
             return render(request, 'parser_hh_app/index.html', context={'form': form})
     else:
@@ -23,14 +23,14 @@ def main_view(request):
         return render(request, 'parser_hh_app/index.html', context={'form': form})
 
 
-def results(request):
-    vacancy = Vacancy.objects.all()
-    area = Code_Region.objects.all()
-    skill = Skill.objects.all()
-    return render(request, 'parser_hh_app/results.html', context={'vacancy': vacancy,
-                                                                  'area': area,
-                                                                  'skills': skill
-                                                                  })
+# def results(request):
+#     vacancy = Vacancy.objects.all()
+#     area = Code_Region.objects.all()
+#     skill = Skill.objects.all()
+#     return render(request, 'parser_hh_app/results.html', context={'vacancy': vacancy,
+#                                                                   'area': area,
+#                                                                   'skills': skill
+#                                                                   })
 
 
 # def contacts(request):
@@ -70,18 +70,15 @@ class Contacts(TemplateView):
         return render(request, self.template_name)
 
 
-# class ResultsListView(ListView):
-#     skill = Skill
-#     vacancy = Vacancy
-#     area = Code_Region
-#     template_name = 'parser_hh_app/results.html'
-#
-#     def get_context_data(self, *args, **kwargs):
-#         context = super().get_context_data(*args, **kwargs)
-#         context['area'] = Code_Region
-#         context['vacancy'] = Vacancy
-#         context['skill'] = Skill
-#         return context
-#
-#     def get_queryset(self):
-#         return Skill.objects.all(), Vacancy.objects.all()
+class ResultsListView(ListView):
+    model = Skill
+    template_name = 'parser_hh_app/results.html'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['area'] = Code_Region.objects.all()
+        context['vacancy'] = Vacancy.objects.all()
+        return context
+
+    def get_queryset(self):
+        return Skill.objects.all()
