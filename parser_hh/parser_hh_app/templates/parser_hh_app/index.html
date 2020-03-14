@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}
+Home
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-lg-12 text-center">
+            <h1 class="mt-5">Парсер сайта HH.ru</h1>
+            <p class="lead">Показывает требуемые ключевые навыки по искомой вакансии</p>
+            <ul class="list-unstyled">
+                <li>Версия на Django</li>
+            </ul>
+        </div>
+    </div>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_ul }}
+        <button type="submit" class="btn btn-primary">Send</button>
+    </form>
+{% endblock %}
+
+<!--<form action="/results/" method="post">-->
+<!--    <label>-->
+<!--&lt;!&ndash;        Вакансия <input type="text" name="vacancy">&ndash;&gt;-->
+<!--    </label>-->
+<!--    <label>-->
+<!--&lt;!&ndash;    Код региона <input type="text" name="area">&ndash;&gt;-->
+<!--    </label>-->
+<!--    <button type="submit">Отправить</button>-->
+<!--</form>-->

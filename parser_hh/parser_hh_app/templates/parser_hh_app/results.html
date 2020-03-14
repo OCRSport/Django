@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}
+Results
+{% endblock %}
+
+{% block content %}
+    <h2>Результаты поиска:</h2>
+    <!--    ol - нумерованные список-->
+    <ol>
+        {% for item in area %}
+        <li>
+            Вакансия: {{item.vacancy}},
+            <br>
+            Регион: {{item.name}}
+        </li>
+            Ключевые навыки:
+        <ul>
+            {% for skill in skills %}
+                {% if item.vacancy == skill.vacancy %}
+                <li>
+                   {{skill.name}} - {{skill.info}}
+                </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+        {% endfor %}
+    </ol>
+{% endblock %}
+<!--<h3>Ключевые навыки:</h3>-->
+<!--&lt;!&ndash;    ul - список&ndash;&gt;-->
+<!--<ul>-->
+<!--    {% if skills %}-->
+<!--        {% for skill in skills %}-->
+<!--            <li>-->
+<!--                {{skill.name}} - {{skill.info}}-->
+<!--            </li>-->
+<!--        {% endfor %}-->
+<!--    {% else %}-->
+<!--        <li>-->
+<!--            {{'Нет данных о требуемых навыках'}}-->
+<!--        </li>-->
+<!--    {% endif %}-->
+<!--</ul>-->
+<!--<h3>Средняя зарплата:</h3>-->
+<!--&lt;!&ndash;    ul - список&ndash;&gt;-->
+<!--<ul>-->
+<!--    <li>{{salary}}</li>-->
+<!--</ul>-->

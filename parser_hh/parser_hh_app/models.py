@@ -12,6 +12,7 @@ class Vacancy(models.Model):
 class Code_Region(models.Model):
     name = models.CharField(max_length=16)
     vacancy = models.ForeignKey(Vacancy, on_delete=models.CASCADE, null=True)
+    # vacancy = models.ManyToManyField(Vacancy)
 
     def __str__(self):
         return self.name
@@ -21,6 +22,7 @@ class Skill(models.Model):
     name = models.CharField(max_length=32)
     info = models.IntegerField()
     vacancy = models.ForeignKey(Vacancy, on_delete=models.CASCADE, null=True)
+    # vacancy = models.ManyToManyField(Vacancy)
 
     def __str__(self):
         return self.name
