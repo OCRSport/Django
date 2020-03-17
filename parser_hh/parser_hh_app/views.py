@@ -1,26 +1,29 @@
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from .models import Vacancy, Skill, Code_Region
 from .form import Parser_form
-from django.views.generic import ListView, TemplateView
+from django.views.generic import ListView, TemplateView, FormView
 from django.http import HttpResponseRedirect
 from parser_hh_app.parser import Parser
 
 
 # Create your views here.
-def main_view(request):
-    if request.method == 'POST':
-        form = Parser_form(request.POST)
-        if form.is_valid():
-            vacancy = form.cleaned_data['vacancy_form']
-            area = form.cleaned_data['area_form']
-            # parser = Parser(vacancy, area)
-            # parser.skills()
-            return HttpResponseRedirect('/results/'), vacancy, area
-        else:
-            return render(request, 'parser_hh_app/index.html', context={'form': form})
-    else:
-        form = Parser_form()
-        return render(request, 'parser_hh_app/index.html', context={'form': form})
+# @login_required
+# def main_view(request):
+#     if request.method == 'POST':
+#         form = Parser_form(request.POST)
+#         if form.is_valid():
+#             vacancy = form.cleaned_data['vacancy_form']
+#             area = form.cleaned_data['area_form']
+#             # parser = Parser(vacancy, area)
+#             # parser.skills()
+#             return HttpResponseRedirect('/results/'), vacancy, area
+#         else:
+#             return render(request, 'parser_hh_app/index.html', context={'form': form})
+#     else:
+#         form = Parser_form()
+#         return render(request, 'parser_hh_app/index.html', context={'form': form})
 
 
 # def results(request):
@@ -43,7 +46,8 @@ def main_view(request):
 #                                                                    })
 
 
-class SkillsListView(ListView):
+class SkillsListView(LoginRequiredMixin, ListView):
+    login_url = '/user/login'
     model = Skill
     template_name = 'skill_list.html'
 
@@ -70,7 +74,8 @@ class Contacts(TemplateView):
         return render(request, self.template_name)
 
 
-class ResultsListView(ListView):
+class ResultsListView(LoginRequiredMixin, ListView):
+    login_url = '/user/login'
     model = Skill
     template_name = 'parser_hh_app/results.html'
 
@@ -82,3 +87,17 @@ class ResultsListView(ListView):
 
     def get_queryset(self):
         return Skill.objects.all()
+
+
+class IndexFormView(LoginRequiredMixin, FormView):
+    template_name = 'parser_hh_app/index.html'
+    form_class = Parser_form
+    success_url = '/results/'
+
+    def form_valid(self, form):
+        vacancy = form.cleaned_data['vacancy_form']
+        area = form.cleaned_data['area_form']
+        parser = Parser(vacancy, area)
+        parser.skills()
+        return super().form_valid(form)
+
