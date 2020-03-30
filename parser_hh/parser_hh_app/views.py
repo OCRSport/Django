@@ -98,5 +98,6 @@ class IndexFormView(LoginRequiredMixin, FormView):
         vacancy = form.cleaned_data['vacancy_form']
         area = form.cleaned_data['area_form']
         parser = Parser(vacancy, area)
+        # не понимаю как result_sort отправить в fill_db.py
         result_sort = sorted(parser.skills().items(), key=lambda x: x[1], reverse=True)
-        return super().form_valid(form), result_sort
+        return super().form_valid(form)
