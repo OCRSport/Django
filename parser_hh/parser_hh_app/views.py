@@ -50,6 +50,7 @@ class SkillsListView(LoginRequiredMixin, ListView):
     login_url = '/user/login'
     model = Skill
     template_name = 'skill_list.html'
+    paginate_by = 10
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
@@ -57,7 +58,7 @@ class SkillsListView(LoginRequiredMixin, ListView):
         return context
 
     def get_queryset(self):
-        return Skill.objects.values('name').distinct().filter(info__gte=2)
+        return Skill.filter_objects.distinct()
 
 
 class Contacts(TemplateView):
@@ -78,6 +79,7 @@ class ResultsListView(LoginRequiredMixin, ListView):
     login_url = '/user/login'
     model = Skill
     template_name = 'parser_hh_app/results.html'
+    paginate_by = 10
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
@@ -86,7 +88,7 @@ class ResultsListView(LoginRequiredMixin, ListView):
         return context
 
     def get_queryset(self):
-        return Skill.objects.all()
+        return Skill.filter_objects.all()
 
 
 class IndexFormView(LoginRequiredMixin, FormView):
@@ -101,3 +103,11 @@ class IndexFormView(LoginRequiredMixin, FormView):
         # не понимаю как result_sort отправить в fill_db.py
         result_sort = sorted(parser.skills().items(), key=lambda x: x[1], reverse=True)
         return super().form_valid(form)
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'парсер hh.ru'
+        return context
+
+    def get_title(self, request):
+        return render(request, self.template_name)

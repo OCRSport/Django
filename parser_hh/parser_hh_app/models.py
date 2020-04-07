@@ -21,7 +21,16 @@ class Code_Region(models.Model):
         return self.name
 
 
+class FilterManager(models.Manager):
+
+    def get_queryset(self):
+        all_objects = super().get_queryset()
+        return all_objects.filter(info__gte=1)
+
+
 class Skill(models.Model):
+    objects = models.Manager()
+    filter_objects = FilterManager()
     name = models.CharField(max_length=32)
     info = models.IntegerField()
     vacancy = models.ForeignKey(Vacancy, on_delete=models.CASCADE)
