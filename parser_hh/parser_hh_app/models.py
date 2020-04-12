@@ -31,7 +31,7 @@ class FilterManager(models.Manager):
 class Skill(models.Model):
     objects = models.Manager()
     filter_objects = FilterManager()
-    name = models.CharField(max_length=32)
+    name = models.CharField(max_length=32, db_index=True)
     info = models.IntegerField()
     vacancy = models.ForeignKey(Vacancy, on_delete=models.CASCADE)
     # user = models.ManyToManyField(ParserUser)
