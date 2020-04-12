@@ -17,16 +17,34 @@ Results
             Ключевые навыки:
         <ul>
             {% for skill in object_list %}
-                {% if item.vacancy == skill.vacancy and skill.info > 1 %}
+                {% if item.vacancy == skill.vacancy %}
                 <li>
-                   {{skill.name}} - {{skill.info}}
+                   {{skill.name|capfirst}} - {{skill.info}}
                 </li>
                 {% endif %}
             {% endfor %}
         </ul>
         {% endfor %}
     </ol>
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo; first</a>
+                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">next</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
 {% endblock %}
+
 <!--<h3>Ключевые навыки:</h3>-->
 <!--&lt;!&ndash;    ul - список&ndash;&gt;-->
 <!--<ul>-->

@@ -5,8 +5,8 @@ admin.site.register(Code_Region)
 admin.site.register(Vacancy)
 
 
-class PostAdmin(admin.ModelAdmin):
+class SkillAdmin(admin.ModelAdmin):
     list_display = ['name', 'info']
 
 
-admin.site.register(Skill, PostAdmin)
+admin.site.register(Skill, SkillAdmin)
