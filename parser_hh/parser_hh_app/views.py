@@ -88,8 +88,8 @@ class ResultsListView(LoginRequiredMixin, ListView):
         return context
 
     def get_queryset(self):
-        return Skill.filter_objects.all()
-
+        return Skill.filter_objects.select_related('vacancy').all()
+        # return Skill.filter_objects.all()
 
 class IndexFormView(LoginRequiredMixin, FormView):
     template_name = 'parser_hh_app/index.html'
